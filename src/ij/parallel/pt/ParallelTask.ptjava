@@ -1,0 +1,46 @@
+package ij.parallel.pt;
+
+import java.util.concurrent.ConcurrentLinkedQueue;
+import paratask.runtime.TaskIDGroup;
+
+public class ParallelTask {
+	
+	public ParallelTask() {
+
+	}
+	
+	/**
+	 * Multi-task paratask
+	 */
+	TASK(*) private void processImagePT_Salt_and_Pepper(ConcurrentLinkedQueue<Runnable> tasks) {
+		
+		Runnable t = null;
+		  
+		while ((t = tasks.poll())!= null) {
+			processDivPT(t);
+		}
+	}
+	
+	/**
+	 * Basic task performed
+	 */
+	private void processDivPT(Runnable task) {
+		task.run();
+	}
+	
+	/**
+	 * Method called by ImageJ
+	 */
+	public void salt_and_pepper_PARATASK(ConcurrentLinkedQueue<Runnable> tasks) {
+		TaskIDGroup idSaltAndPepper = processImagePT_Salt_and_Pepper(tasks);
+		try
+		{
+			idSaltAndPepper.waitTillFinished();
+		}
+		catch (Exception e)
+		{
+		  e.printStackTrace();
+		}
+	}
+	
+}
